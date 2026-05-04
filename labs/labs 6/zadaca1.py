@@ -37,6 +37,18 @@ if __name__ == '__main__':
 
     preds = model.predict(test_X_enc)
     accuracy = accuracy_score(test_y, preds)
+
+    # max_probas  = proba_test.max(axis=1)
+    #
+    # # Филтрираме само оние записи каде моделот е "доволно сигурен"
+    # filtered_true  = [test_y[i]  for i in range(len(test_y))  if max_probas[i] >= T]
+    # filtered_preds = [preds[i]   for i in range(len(preds))   if max_probas[i] >= T]
+    #
+    # if len(filtered_true) > 0:
+    #     accuracy = accuracy_score(filtered_true, filtered_preds)
+    # else:
+    #     accuracy = 0.0
+
     # print(f"Accuracy: {accuracy}")
     print(accuracy)
 
@@ -46,6 +58,7 @@ if __name__ == '__main__':
 
     predicted_class = model.predict(new_sample)[0]
     probabilities = model.predict_proba(new_sample)
+
     # print(f'Nov primerok: {new_sample}')
     # print(f'Predvidena klasa: {predicted_class}')
     # print(f'Verojatnosti za pripadnost vo klasite: {probabilities}')
@@ -73,3 +86,16 @@ if __name__ == '__main__':
 
     # submit na encoderot
     # submit_encoder(encoder)
+
+    # train_X = X[split_index:]
+    # train_y = y[split_index:]
+    # test_X = X[:split_index]
+    # test_y = y[:split_index]
+
+    #max_prob = probabilities.max()
+
+    # Предвидување со threshold
+    # if max_prob < T:
+    #     print("Predviduvanje so treshold: UNKNOWN")
+    # else:
+    #     print(f"Predviduvanje so treshold: {max_prob}")
