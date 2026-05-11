@@ -21,17 +21,16 @@ if __name__ == '__main__':
     Xinput = int(input())
     criterion = input()
 
-    X, y = [row[:-1] for row in dataset], [row[-1] for row in dataset]
+    X, Y = [row[:-1] for row in dataset], [row[-1] for row in dataset]
 
     encoder = OrdinalEncoder()
-    encoder.fit(X)
+    # encoder.fit(X)
 
-    # split_index = int(len(dataset) * (100-Xinput) / 100)
-    train_X, test_X = X[int(len(dataset)*(100-Xinput)/100):], X[:int(len(dataset)*(100-Xinput)/100)]
-    train_Y, test_Y = y[int(len(dataset)*(100-Xinput)/100):], y[:int(len(dataset)*(100-Xinput)/100)]
 
-    train_X_enc = encoder.transform(train_X)
-    test_X_enc = encoder.transform(test_X)
+    X_enc = encoder.fit_transform(X).tolist()
+    split_index = int(len(dataset) * (100-Xinput)/100)
+    train_X, test_X = X_enc[split_index:], X_enc[:split_index]
+    train_Y, test_Y = Y[split_index:], Y[:split_index]
 
     params_1 = {
         'criterion': criterion,
@@ -40,7 +39,7 @@ if __name__ == '__main__':
 
     classifier = DecisionTreeClassifier(**params_1)
 
-    classifier.fit(train_X_enc, train_Y)
+    classifier.fit(train_X, train_Y)
 
     # Depth
     print(f"Depth: {classifier.get_depth()}")
@@ -49,7 +48,7 @@ if __name__ == '__main__':
     print(f"Number of leaves: {classifier.get_n_leaves()}")
 
     # Accuracy
-    preds = classifier.predict(test_X_enc)
+    preds = classifier.predict(test_X)
     print(f"Accuracy: {accuracy_score(preds, test_Y)}")
 
     # Most important feature
@@ -66,10 +65,10 @@ if __name__ == '__main__':
     # klasifikatorot i encoderot so povik na slednite funkcii
 
     # submit na trenirachkoto mnozestvo
-    submit_train_data(train_X_enc, train_Y)
+    submit_train_data(train_X, train_Y)
 
     # submit na testirachkoto mnozestvo
-    submit_test_data(test_X_enc, test_Y)
+    submit_test_data(test_X, test_Y)
 
     # submit na klasifikatorot
     submit_classifier(classifier)
